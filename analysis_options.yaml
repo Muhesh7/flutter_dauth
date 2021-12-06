@@ -2,3 +2,40 @@ include: package:flutter_lints/flutter.yaml
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
+analyzer:
+  errors:
+    missing_required_param: warning
+    missing_return: warning
+    todo: ignore
+linter:
+  rules:
+    prefer_single_quotes: true
+    avoid_empty_else: true
+    avoid_unnecessary_containers: true
+    avoid_unused_constructor_parameters: true
+    curly_braces_in_flow_control_structures: true
+    empty_catches: true
+    eol_at_end_of_file: true
+    file_names: true
+    use_full_hex_values_for_flutter_colors: true
+    prefer_expression_function_bodies: true
+    unnecessary_await_in_return: true
+    unnecessary_brace_in_string_interps: true
+    unnecessary_const: true
+    unnecessary_lambdas: true
+    unnecessary_new: true
+    unnecessary_null_aware_assignments: true
+    unnecessary_null_in_if_null_operators: true
+    unnecessary_overrides: true
+    unnecessary_parenthesis: true
+    unnecessary_raw_strings: true
+    unnecessary_statements: true
+    unnecessary_string_escapes: true
+    unnecessary_string_interpolations: true
+    unnecessary_this: true
+    always_use_package_imports: true
+    avoid_relative_lib_imports: true
+    avoid_function_literals_in_foreach_calls: true
+    camel_case_types: true
+    constant_identifier_names: true
+

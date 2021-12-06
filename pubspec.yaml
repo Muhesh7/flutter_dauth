@@ -10,7 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  oauth2:
+  http: ^0.13.4  
+  webview_flutter: ^2.3.1
 
 dev_dependencies:
   flutter_test:
