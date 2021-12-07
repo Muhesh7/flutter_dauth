@@ -1,17 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_dauth/src/api/api_service.dart';
 import 'package:flutter_dauth/src/api/urls.dart';
 import 'package:flutter_dauth/src/model/requests/grant_request.dart';
-import 'package:flutter_dauth/src/model/response/resource_response.dart';
 import 'package:flutter_dauth/src/model/response/result_response.dart';
 import 'package:flutter_dauth/src/model/response/token_response.dart';
+import 'package:flutter_dauth/src/widgets/dauth_web_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class AuthorizationCodeGrant {
   late AuthorizationGrantRequest _authorizationGrantRequest;
-  final Api _api = Api();
 
   Future<ResultResponse<TokenResponse, String>> fetchTokenViaWebView(
       AuthorizationGrantRequest authorizationGrantRequest,
@@ -34,9 +32,7 @@ class AuthorizationCodeGrant {
     return url;
   }
 
-  String _getRedirectUri() {
-    return _authorizationGrantRequest.redirectUri;
-  }
+  String _getRedirectUri() => _authorizationGrantRequest.redirectUri;
 
   void _openWebView(BuildContext _context,
       Completer<ResultResponse<TokenResponse, String>> completer) async {
@@ -44,32 +40,10 @@ class AuthorizationCodeGrant {
 
     showDialog(
         context: _context,
-        builder: (BuildContext context) => _webViewDialog(context, completer));
+        builder: (BuildContext context) => DauthWebView(
+            authorizationUrl: _getAuthorizationUrl(),
+            redirectUri: _getRedirectUri(),
+            completer: completer,
+            request: _authorizationGrantRequest));
   }
-
-  Widget _webViewDialog(BuildContext dialogContext,
-          Completer<ResultResponse<TokenResponse, String>> completer) =>
-      WebView(
-        javascriptMode: JavascriptMode.unrestricted,
-        initialUrl: _getAuthorizationUrl(),
-        navigationDelegate: (navReq) async {
-          if (navReq.url.startsWith(_getRedirectUri())) {
-            Uri responseUrl = Uri.parse(navReq.url);
-            String? code = responseUrl.queryParameters['code'];
-            var res = await _requestToken(code!);
-            completer.complete(res);
-            Navigator.pop(dialogContext);
-            return NavigationDecision.prevent;
-          }
-          return NavigationDecision.navigate;
-        },
-      );
-
-  Future<ResultResponse<TokenResponse, String>> _requestToken(
-          String code) async =>
-      _api.fetchToken(_authorizationGrantRequest, code);
-
-  Future<ResultResponse<ResourceResponse, String>> requestResource(
-          String accessToken) async =>
-      _api.fetchResources(accessToken);
 }

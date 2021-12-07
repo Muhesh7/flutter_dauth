@@ -25,7 +25,7 @@ class DauthButton extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Image.asset(
-                  'assets/delta_logo.png',
+                  'lib/src/img/delta_logo.png',
                   height: 28,
                 ),
               ),
