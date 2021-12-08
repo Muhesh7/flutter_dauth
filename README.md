@@ -21,7 +21,7 @@ Note: OAuth2 provides several different methods for the client to obtain authori
 ## Features
 ![AuthorisationCodeGrant](./dauth_img.png)
 
-* This Package Allows user to get the authorized token by calling ```fetchTokenViaWebView(authorizationRequest)```, which automates the following workflow:
+* This Package Allows user to get the authorized token by calling ```fetchToken(authorizationRequest)```, which automates the following workflow:
     * Generates ``authorizationUrl`` using the provided authorizationRequest in the parameter.
     * Opens up a webView with the generated ``authorizationUrl`` and Listens to the NavigationRequests.
     * Allows user to enable permissions to Client-App to access the resource of the user from Dauth-Resource-Provider.
@@ -36,13 +36,13 @@ Note: OAuth2 provides several different methods for the client to obtain authori
 *ResourceResponse*           |  *String?* tokenType, *String?* accessToken, *String?* state, *int?* expiresIn,*String?* idToken,*String?* status,*ErrorResponse?* errorResponse|   Response-body returned from `fetchResources()` request
 *TokenResponse*|  *String?* email,*String?* id,*String?* name,*String?*  phoneNumber,*String?* gender,*DateTime?* createdAt,*DateTime?* updatedAt,             |                                                            Response-body returned from `fetchToken()` request
 *Scope*                      | *bool* isOpenId, *bool* isEmail, *bool* isProfile, *bool* isUser                                      |   Consists of 4 boolean parameters to enable SCOPE of Resource Access
-*AuthorizationGrantRequest* | *String?* clientId,*String?* clientSecret,*String?* redirectUri,*String?* responseType,*String?* grantType,*String?* state,*String?* scope,*String?* nonce | Request-Parameter for `fetchTokenViaWebView()`
+*TokenRequest* | *String?* clientId,*String?* clientSecret,*String?* redirectUri,*String?* responseType,*String?* grantType,*String?* state,*String?* scope,*String?* nonce | Request-Parameter for `fetchToken()`
 
  ### Methods
 
   Methods                                                         |   Parameters 
 ----------------------------------------------------------------- | --------------------------
-*ResultResponse<<TokenResponse,String>>* `fetchTokenViaWebView()` | *AuthorizationGrantRequest* `request`
+*ResultResponse<<TokenResponse,String>>* `fetchToken()`           | *TokenRequest* `request`
 *ResultResponse<<ResourceResponse,String>>* `fetchResource()`     | *String* `access_token`
 *Widget* `DauthButton()`                                          | *Function* OnPressed: (Response<TokenResponse,String> res){}
 
@@ -86,13 +86,21 @@ class HomePage extends StatefulWidget {
 }
 
 class HomeState extends State<HomePage> {
-  final String _exampleText = 'Flutter Application';
-  final AuthorizationGrantRequest _authorizationGrantRequest =
-      AuthorizationGrantRequest(
-          clientId: 'YOUR CLIENT ID',
-          clientSecret: 'YOUR CLIENT SECRET',
-          redirectUri: 'YOUR REDIRECT URI',
-          state: 'STATE');
+  //A string object used in Text() widget as data.
+  String _exampleText = 'Flutter Application';
+
+  //Create a TokenRequest Object
+  final dauth.TokenRequest _request = TokenRequest(
+      //Your Client-Id provided by Dauth Server at the time of registration.
+      clientId: 'YOUR CLIENT ID',
+      //Your Client-Secret provided by Dauth Server at the time of registration.
+      clientSecret: 'YOUR CLIENT SECRET',
+      //redirectUri provided by You to Dauth Server at the time of registration.
+      redirectUri: 'YOUR REDIRECT URI',
+      //A String which will retured with access_token for token verification in client side.
+      state: 'STATE',
+      //setting isUser to true to retrive UserDetails in ResourceResponse from Dauth server.
+      scope: const dauth.Scope(isUser: true));
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -104,23 +112,33 @@ class HomeState extends State<HomePage> {
             Center(
                 child: Text(
               _exampleText,
-              style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             )),
             Positioned(
                 left: 50,
                 right: 50,
                 bottom: 10,
-                child: DauthButton(
-                    request: _authorizationGrantRequest,
-                    onPressed: (ResultResponse<TokenResponse, String> res) {
-                      setState(() => (res.response as TokenResponse)
-                          .accessToken
-                          .toString());
+                //DAuth button returns TokenResponse and ResponseMessage when pressed.
+                child: dauth.DauthButton(
+                    request: _request,
+                    onPressed:
+                        (dauth.ResultResponse<dauth.TokenResponse, String>
+                            res) {
+                      //changes the exampleText as Token_TYPE: <YOUR_TOKEN> from the previous string if the response is success'
+                      if (res.message == 'success') {
+                        setState(() {
+                          _exampleText = 'Token_TYPE: ' +
+                              (res.response as dauth.TokenResponse)
+                                  .tokenType
+                                  .toString();
+                        });
+                      }
                     }))
           ],
         ),
       )));
 }
+
 ```
 ## Issues
 * This Package is Not preffered for Flutter-Web since it currently supports Authorization Grant Code at the time of writing.
@@ -129,3 +147,6 @@ class HomeState extends State<HomePage> {
 This package wouldn't be possible without the following:
 * [webviewx](https://pub.dev/packages/webviewx) : for opening AuthorizationUrl in WebView and Listening to NavigationRequest
 * [https](https://pub.dev/packages/http) : for HTTP requests to the Dauth-Server.
+
+## License
+ * [MIT]('./LICENSE')

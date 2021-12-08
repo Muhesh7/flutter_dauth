@@ -1,9 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dauth/src/model/requests/grant_request.dart';
-import 'package:flutter_dauth/src/model/response/result_response.dart';
-import 'package:flutter_dauth/src/model/response/token_response.dart';
-import 'package:flutter_dauth/src/widgets/dauth_button.dart';
+import 'package:flutter_dauth/src/model/requests/token_request.dart';
+import 'package:flutter_dauth/flutter_dauth.dart' as dauth;
 
 void main() {
   runApp(const MyApp());
@@ -26,13 +24,21 @@ class HomePage extends StatefulWidget {
 }
 
 class HomeState extends State<HomePage> {
-  final String _exampleText = 'Flutter Application';
-  final AuthorizationGrantRequest _authorizationGrantRequest =
-      AuthorizationGrantRequest(
-          clientId: 'YOUR CLIENT ID',
-          clientSecret: 'YOUR CLIENT SECRET',
-          redirectUri: 'YOUR REDIRECT URI',
-          state: 'STATE');
+  //A string object used in Text() widget as data.
+  String _exampleText = 'Flutter Application';
+
+  //Create a TokenRequest Object
+  final dauth.TokenRequest _request = TokenRequest(
+      //Your Client-Id provided by Dauth Server at the time of registration.
+      clientId: 'YOUR CLIENT ID',
+      //Your Client-Secret provided by Dauth Server at the time of registration.
+      clientSecret: 'YOUR CLIENT SECRET',
+      //redirectUri provided by You to Dauth Server at the time of registration.
+      redirectUri: 'YOUR REDIRECT URI',
+      //A String which will retured with access_token for token verification in client side.
+      state: 'STATE',
+      //setting isUser to true to retrive UserDetails in ResourceResponse from Dauth server.
+      scope: const dauth.Scope(isUser: true));
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -44,18 +50,27 @@ class HomeState extends State<HomePage> {
             Center(
                 child: Text(
               _exampleText,
-              style: const TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             )),
             Positioned(
                 left: 50,
                 right: 50,
                 bottom: 10,
-                child: DauthButton(
-                    request: _authorizationGrantRequest,
-                    onPressed: (ResultResponse<TokenResponse, String> res) {
-                      setState(() => (res.response as TokenResponse)
-                          .accessToken
-                          .toString());
+                //DAuth button returns TokenResponse and ResponseMessage when pressed.
+                child: dauth.DauthButton(
+                    request: _request,
+                    onPressed:
+                        (dauth.ResultResponse<dauth.TokenResponse, String>
+                            res) {
+                      //changes the exampleText as Token_TYPE: <YOUR_TOKEN> from the previous string if the response is success'
+                      if (res.message == 'success') {
+                        setState(() {
+                          _exampleText = 'Token_TYPE: ' +
+                              (res.response as dauth.TokenResponse)
+                                  .tokenType
+                                  .toString();
+                        });
+                      }
                     }))
           ],
         ),

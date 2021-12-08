@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+///[DauthLoader] is a LoadingScreen Widget which is Displayed until the WebView loads.
 class DauthLoader extends StatelessWidget {
   const DauthLoader({Key? key}) : super(key: key);
 

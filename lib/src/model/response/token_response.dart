@@ -3,23 +3,35 @@ import 'dart:convert';
 TokenResponse tokenResponseFromJson(String str) =>
     TokenResponse.fromJson(json.decode(str));
 
+///[TokenResponse] is the response-body recieved from fetchToken()
+
 class TokenResponse {
+  ///[tokenType] is the accessToken type returned from Dauth-server.
+  final String? tokenType;
+
+  ///[accessToken] is the accessToken returned from Dauth-server.
+  final String? accessToken;
+
+  ///[state] is the same state that was sent by client in `TokenRequest`.
+  ///This can be used for Token Verification and prevent CSRF attacks.
+  final String? state;
+
+  ///[expiresIn] is the expirationTime of the accessToken from the time of last Token Fetch from server.
+  final int? expiresIn;
+
+  ///[idToken] is the idToken of the resource-owner from server.
+  final String? idToken;
+
+  ///[errorResponse] is optional field provided to handle errors.
+  final ErrorResponse? errorResponse;
+
   TokenResponse(
       {this.tokenType,
       this.accessToken,
       this.state,
       this.expiresIn,
       this.idToken,
-      this.status,
       this.errorResponse});
-
-  final String? tokenType;
-  final String? accessToken;
-  final String? state;
-  final int? expiresIn;
-  final String? idToken;
-  final String? status;
-  final ErrorResponse? errorResponse;
 
   factory TokenResponse.fromRawJson(String str) =>
       TokenResponse.fromJson(json.decode(str));
@@ -43,14 +55,19 @@ class TokenResponse {
       };
 }
 
+///[ErrorResponse] is object for handling network errors.
+
 class ErrorResponse {
+  ///[error] is a string which notifies about the error
+  final String error;
+
+  ///[errorDescription] is a string which gives detailed description of the error
+  final String errorDescription;
+
   ErrorResponse({
     required this.error,
     required this.errorDescription,
   });
-
-  final String error;
-  final String errorDescription;
 
   factory ErrorResponse.fromRawJson(String str) =>
       ErrorResponse.fromJson(json.decode(str));
