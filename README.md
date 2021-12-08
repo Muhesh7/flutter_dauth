@@ -21,7 +21,7 @@ Note: OAuth2 provides several different methods for the client to obtain authori
 ## Features
 ![AuthorisationCodeGrant](./dauth_img.png)
 
-* This Package Allows user to get the authorized token by calling ```fetchTokenViaWebView(authorizationRequest)```, which automates the following workflow:
+* This Package Allows user to get the authorized token by calling ```fetchToken(authorizationRequest)```, which automates the following workflow:
     * Generates ``authorizationUrl`` using the provided authorizationRequest in the parameter.
     * Opens up a webView with the generated ``authorizationUrl`` and Listens to the NavigationRequests.
     * Allows user to enable permissions to Client-App to access the resource of the user from Dauth-Resource-Provider.
@@ -36,13 +36,13 @@ Note: OAuth2 provides several different methods for the client to obtain authori
 *ResourceResponse*           |  *String?* tokenType, *String?* accessToken, *String?* state, *int?* expiresIn,*String?* idToken,*String?* status,*ErrorResponse?* errorResponse|   Response-body returned from `fetchResources()` request
 *TokenResponse*|  *String?* email,*String?* id,*String?* name,*String?*  phoneNumber,*String?* gender,*DateTime?* createdAt,*DateTime?* updatedAt,             |                                                            Response-body returned from `fetchToken()` request
 *Scope*                      | *bool* isOpenId, *bool* isEmail, *bool* isProfile, *bool* isUser                                      |   Consists of 4 boolean parameters to enable SCOPE of Resource Access
-*AuthorizationGrantRequest* | *String?* clientId,*String?* clientSecret,*String?* redirectUri,*String?* responseType,*String?* grantType,*String?* state,*String?* scope,*String?* nonce | Request-Parameter for `fetchTokenViaWebView()`
+*TokenRequest* | *String?* clientId,*String?* clientSecret,*String?* redirectUri,*String?* responseType,*String?* grantType,*String?* state,*String?* scope,*String?* nonce | Request-Parameter for `fetchToken()`
 
  ### Methods
 
   Methods                                                         |   Parameters 
 ----------------------------------------------------------------- | --------------------------
-*ResultResponse<<TokenResponse,String>>* `fetchTokenViaWebView()` | *AuthorizationGrantRequest* `request`
+*ResultResponse<<TokenResponse,String>>* `fetchToken()`           | *TokenRequest* `request`
 *ResultResponse<<ResourceResponse,String>>* `fetchResource()`     | *String* `access_token`
 *Widget* `DauthButton()`                                          | *Function* OnPressed: (Response<TokenResponse,String> res){}
 
