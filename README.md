@@ -140,8 +140,10 @@ class HomeState extends State<HomePage> {
 }
 
 ```
-## Issues
-* This Package is Not preffered for Flutter-Web since it currently supports Authorization Grant Code at the time of writing.
+## Issues/Upcoming Changes
+* To Ensure Security issues related to Interception attacks [PKCE](https://oauth.net/2/pkce/) will be added with Authorisation Code Grant.
+* DAuth only supports Authorisation Grant Flow at the time of writing supports, in future more methods will be added and flutter_dauth will also be updated accordingly.
+
 ## Credits
 
 This package wouldn't be possible without the following:
