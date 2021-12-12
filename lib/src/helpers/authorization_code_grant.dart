@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dauth/src/api/api_service.dart';
 import 'package:flutter_dauth/src/api/urls.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_dauth/src/model/response/resource_response.dart';
 import 'package:flutter_dauth/src/model/response/result_response.dart';
 import 'package:flutter_dauth/src/model/response/token_response.dart';
 import 'package:flutter_dauth/src/widgets/dauth_web_view.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 /// AuthorizationCodeGrant class allows developer to use DAuth Authentication & Resource Services
 /// This class has all the required methods to automates the fetching proccess of `accessToken`
@@ -37,7 +35,7 @@ class AuthorizationCodeGrant {
   }
 
   ///This Method takes `TokenRequest` as parameter and generates ``AuthorizationUrl`` for the webview to render
-  String _getAuthorizationUrl(TokenRequest request) {
+  String getAuthorizationUrl(TokenRequest request) {
     String url =
         '${Urls.authorizationEndPoint}?client_id=${request.clientId}&redirect_uri=${request.redirectUri}&response_type=${request.responseType}&grant_type=${request.grantType}&state=${request.state}';
     if (request.scope != null) {
@@ -54,9 +52,6 @@ class AuthorizationCodeGrant {
       BuildContext _context,
       Completer<ResultResponse<TokenResponse, String>> completer,
       TokenRequest request) async {
-    //To Ensure that SurfaceWebView is used in Android Devices
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-
     //This Completer is used to notify when the WebView is loading is finished
     final Completer<bool> _isPageLoaded = Completer<bool>();
 
@@ -64,7 +59,7 @@ class AuthorizationCodeGrant {
     showDialog(
         context: _context,
         builder: (BuildContext context) => DauthWebView(
-            authorizationUrl: _getAuthorizationUrl(request),
+            authorizationUrl: getAuthorizationUrl(request),
             redirectUri: request.redirectUri,
             completer: completer,
             loader: _isPageLoaded,

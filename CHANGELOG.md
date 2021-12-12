@@ -1,3 +1,3 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* Feat : Flutter package for DAuth integration which supports Authorization Code Flow.
