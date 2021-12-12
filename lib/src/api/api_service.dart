@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 ///[Api] class is a ApiManager which handles all the Network related processes by using [http].
 class Api {
-  static var client = http.Client();
+  var client = http.Client();
 
   ///This Method fetches and returns Future of [TokenResponse] along with the response-status-message.
   Future<ResultResponse<TokenResponse, String>> getToken(

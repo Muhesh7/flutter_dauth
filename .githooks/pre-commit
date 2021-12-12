@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+echo "Run Formatter..."
+flutter format .
+
+echo "Run Analyzer..."
+flutter analyze || { echo "flutter analyze error"; exit 1; }
