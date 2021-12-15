@@ -3,7 +3,7 @@ import 'package:flutter_dauth/src/helpers/authorization_code_grant.dart';
 import 'package:flutter_dauth/src/model/requests/token_request.dart';
 import 'package:flutter_dauth/src/model/response/token_response.dart';
 
-///Additional Widget Provided to Client-App to Ease the proccess of Retrival of TokenResponse
+///[DAuthButton] is an Additional Widget Provided to Client-App to Ease the proccess of Retrival of TokenResponse
 class DauthButton extends StatelessWidget {
   ///[onPressed] is a callback function which returns the `TokenResponse` as Response-Body Asynchronouslly when pressed.
   final Function onPressed;
@@ -39,8 +39,8 @@ class DauthButton extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Text(
-                  'Sign In With DeltaForce',
-                  style: TextStyle(fontSize: 14, color: Colors.white),
+                  'Sign In With DAuth',
+                  style: TextStyle(fontSize: 15, color: Colors.white),
                   textAlign: TextAlign.left,
                 ),
               ),

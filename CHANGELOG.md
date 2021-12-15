@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Feat : Added PKCE to Secure Authorisation Code Flow in Public Clients from intercept attacks.
+
 ## 0.0.2
 
 * Fix : Update README.md

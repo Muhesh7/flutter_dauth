@@ -58,7 +58,7 @@ class DauthWebView extends StatelessWidget {
             String? code = responseUrl.queryParameters['code'];
 
             //fetchesToken using the `code` as a input parameter and returns future of [TokenResponse].
-            var res = await Api().getToken(request, code!);
+            var res = await Api().getToken(request, code!, completer);
 
             //Completes the completer.
             completer.complete(res);

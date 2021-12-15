@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_dauth/src/api/urls.dart';
 import 'package:flutter_dauth/src/model/requests/token_request.dart';
 import 'package:flutter_dauth/src/model/response/resource_response.dart';
@@ -9,7 +11,8 @@ class Api {
   var client = http.Client();
 
   ///This Method fetches and returns Future of [TokenResponse] along with the response-status-message.
-  Future<TokenResponse> getToken(TokenRequest request, String code) async {
+  Future<TokenResponse> getToken(TokenRequest request, String code,
+      Completer<TokenResponse> completer) async {
     try {
       //POST request is sent to DAuth Authorization-Server with TokenRequest parameters as request-body.
       var response = await client.post(Uri.parse(Urls.tokenEndPoint), body: {
@@ -24,10 +27,15 @@ class Api {
       if (response.statusCode == 200) {
         return tokenResponseFromJson(response.body);
       } else {
-        throw 'failed with Response-Code:${response.statusCode} because: ${response.body}';
+        var error =
+            'failed with Response-Code:${response.statusCode} because: ${response.body}';
+        completer.completeError(error);
+        throw error;
       }
     } catch (e) {
-      throw 'error:${e.toString()}';
+      var error = 'error:${e.toString()}';
+      completer.completeError(error);
+      throw error;
     }
   }
 

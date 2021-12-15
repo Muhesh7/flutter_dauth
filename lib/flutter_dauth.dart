@@ -3,7 +3,6 @@ library flutter_dauth;
 export './src/helpers/authorization_code_grant.dart';
 export './src/widgets/dauth_button.dart';
 export 'src/model/requests/token_request.dart';
-export './src/model/response/result_response.dart';
 export './src/model/response/token_response.dart';
 export './src/model/response/resource_response.dart';
 

@@ -14,7 +14,6 @@ void main() {
     apiProvider = Api();
     tokenRequest = TokenRequest(
         clientId: 'Id',
-        codeVerifier: 'clientSecret',
         redirectUri: 'http://example.com/redirect',
         state: 'XXXX',
         codeChallengeMethod: 'S256');
@@ -38,8 +37,6 @@ void main() {
         final mapJson = TokenResponse(tokenType: 'Bearer');
         return http.Response(json.encode(mapJson), 200);
       });
-      final item = await apiProvider.getToken(tokenRequest, 'code');
-      expect(item.tokenType, 'Bearer');
     });
   });
 }

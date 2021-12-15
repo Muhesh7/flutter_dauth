@@ -31,8 +31,6 @@ class HomeState extends State<HomePage> {
   final dauth.TokenRequest _request = TokenRequest(
       //Your Client-Id provided by Dauth Server at the time of registration.
       clientId: 'YOUR CLIENT ID',
-      //Your Client-Secret provided by Dauth Server at the time of registration.
-      codeVerifier: 'YOUR CLIENT SECRET',
       //redirectUri provided by You to Dauth Server at the time of registration.
       redirectUri: 'YOUR REDIRECT URI',
       //A String which will retured with access_token for token verification in client side.
@@ -46,13 +44,14 @@ class HomeState extends State<HomePage> {
   Widget build(BuildContext context) => SafeArea(
           child: Scaffold(
               body: Container(
-        color: Colors.blueGrey,
+        color: Colors.blue,
         child: Stack(
           children: [
             Center(
                 child: Text(
               _exampleText,
-              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             )),
             Positioned(
                 left: 50,
@@ -61,18 +60,11 @@ class HomeState extends State<HomePage> {
                 //DAuth button returns TokenResponse and ResponseMessage when pressed.
                 child: dauth.DauthButton(
                     request: _request,
-                    onPressed:
-                        (dauth.ResultResponse<dauth.TokenResponse, String>
-                            res) {
+                    onPressed: (dauth.TokenResponse res) {
                       //changes the exampleText as Token_TYPE: <YOUR_TOKEN> from the previous string if the response is success'
-                      if (res.message == 'success') {
-                        setState(() {
-                          _exampleText = 'Token_TYPE: ' +
-                              (res.response as dauth.TokenResponse)
-                                  .tokenType
-                                  .toString();
-                        });
-                      }
+                      setState(() {
+                        _exampleText = 'Token: ' + res.tokenType.toString();
+                      });
                     }))
           ],
         ),
