@@ -14,9 +14,9 @@ void main() {
     apiProvider = Api();
     tokenRequest = TokenRequest(
         clientId: 'Id',
-        clientSecret: 'clientSecret',
         redirectUri: 'http://example.com/redirect',
-        state: 'XXXX');
+        state: 'XXXX',
+        codeChallengeMethod: 'S256');
     grant = dauth.AuthorizationCodeGrant();
   });
 
@@ -37,8 +37,6 @@ void main() {
         final mapJson = TokenResponse(tokenType: 'Bearer');
         return http.Response(json.encode(mapJson), 200);
       });
-      final item = await apiProvider.getToken(tokenRequest, 'code');
-      expect((item.response as TokenResponse).tokenType, 'Bearer');
     });
   });
 }

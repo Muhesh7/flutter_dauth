@@ -32,19 +32,18 @@ Note: OAuth2 provides several different methods for the client to obtain authori
  ### DataTypes
   DataTypes                  |   Parameters                                              |   Description
 ---------------------------- | -------------                                             |--------------------------
-*ResultResponse<<T,String>>* | *dynamic* response,*String* message                       |   Wraps Http response-body with response-status-message.
 *ResourceResponse*           |  *String?* tokenType, *String?* accessToken, *String?* state, *int?* expiresIn,*String?* idToken,*String?* status,*ErrorResponse?* errorResponse|   Response-body returned from `fetchResources()` request
 *TokenResponse*|  *String?* email,*String?* id,*String?* name,*String?*  phoneNumber,*String?* gender,*DateTime?* createdAt,*DateTime?* updatedAt,             |                                                            Response-body returned from `fetchToken()` request
 *Scope*                      | *bool* isOpenId, *bool* isEmail, *bool* isProfile, *bool* isUser                                      |   Consists of 4 boolean parameters to enable SCOPE of Resource Access
-*TokenRequest* | *String?* clientId,*String?* clientSecret,*String?* redirectUri,*String?* responseType,*String?* grantType,*String?* state,*String?* scope,*String?* nonce | Request-Parameter for `fetchToken()`
+*TokenRequest* | *String?* clientId,*String?* codeVerifier,*String* codeChallengeMethod,*String?* redirectUri,*String?* responseType,*String?* grantType,*String?* state,*String?* scope,*String?* nonce | Request-Parameter for `fetchToken()`
 
  ### Methods
 
-  Methods                                                         |   Parameters 
------------------------------------------------------------------ | --------------------------
-*ResultResponse<<TokenResponse,String>>* `fetchToken()`           | *TokenRequest* `request`
-*ResultResponse<<ResourceResponse,String>>* `fetchResource()`     | *String* `access_token`
-*Widget* `DauthButton()`                                          | *Function* OnPressed: (Response<TokenResponse,String> res){}
+  Methods                                |   Parameters 
+-----------------------------------------| --------------------------
+*TokenResponse* `fetchToken()`           | *TokenRequest* `request`
+*ResourceResponse* `fetchResource()`     | *String* `access_token`
+*Widget* `DauthButton()`                 | *Function* OnPressed: (TokenResponse res){}
 
 ## Getting started
 To use this package:
@@ -91,16 +90,16 @@ class HomeState extends State<HomePage> {
 
   //Create a TokenRequest Object
   final dauth.TokenRequest _request = TokenRequest(
-      //Your Client-Id provided by Dauth Server at the time of registration.
+     //Your Client-Id provided by Dauth Server at the time of registration.
       clientId: 'YOUR CLIENT ID',
-      //Your Client-Secret provided by Dauth Server at the time of registration.
-      clientSecret: 'YOUR CLIENT SECRET',
       //redirectUri provided by You to Dauth Server at the time of registration.
       redirectUri: 'YOUR REDIRECT URI',
       //A String which will retured with access_token for token verification in client side.
       state: 'STATE',
       //setting isUser to true to retrive UserDetails in ResourceResponse from Dauth server.
-      scope: const dauth.Scope(isUser: true));
+      scope: const dauth.Scope(isUser: true),
+      //codeChallengeMethod Should be specified as `plain` or `S256` based on thier requirement.
+      codeChallengeMethod: 'S256');
 
   @override
   Widget build(BuildContext context) => SafeArea(
@@ -122,17 +121,14 @@ class HomeState extends State<HomePage> {
                 child: dauth.DauthButton(
                     request: _request,
                     onPressed:
-                        (dauth.ResultResponse<dauth.TokenResponse, String>
-                            res) {
+                        (dauth.TokenResponse res) {
                       //changes the exampleText as Token_TYPE: <YOUR_TOKEN> from the previous string if the response is success'
-                      if (res.message == 'success') {
                         setState(() {
                           _exampleText = 'Token_TYPE: ' +
-                              (res.response as dauth.TokenResponse)
+                              (res)
                                   .tokenType
                                   .toString();
                         });
-                      }
                     }))
           ],
         ),
@@ -140,8 +136,10 @@ class HomeState extends State<HomePage> {
 }
 
 ```
+## Updates
+* To Ensure Security issues related to Interception attacks [PKCE](https://oauth.net/2/pkce/) is added with Authorisation Code Grant.
+
 ## Issues/Upcoming Changes
-* To Ensure Security issues related to Interception attacks [PKCE](https://oauth.net/2/pkce/) will be added with Authorisation Code Grant.
 * DAuth only supports Authorisation Grant Flow at the time of writing supports, in future more methods will be added and flutter_dauth will also be updated accordingly.
 
 ## Credits
@@ -149,6 +147,7 @@ class HomeState extends State<HomePage> {
 This package wouldn't be possible without the following:
 * [webviewx](https://pub.dev/packages/webviewx) : for opening AuthorizationUrl in WebView and Listening to NavigationRequest
 * [https](https://pub.dev/packages/http) : for HTTP requests to the Dauth-Server.
+* [crypto](https://pub.dev/packages/crypto) : for SHA256 encryption.
 
 ## License
  * [MIT]('./LICENSE')

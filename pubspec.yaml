@@ -2,7 +2,7 @@ name: flutter_dauth
 description: A Flutter Package which allows a Client-App to access and manipulate a resource that's owned by a resource owner (user) and lives on a DAuth server.
 repository: https://github.com/Muhesh7/flutter_dauth
 issue_tracker: https://github.com/Muhesh7/flutter_dauth/issues
-version: 0.0.2
+version: 0.0.3
 homepage: https://auth.delta.nitt.edu
 documentation: https://delta.github.io/DAuth-Docs/
 
@@ -15,6 +15,7 @@ dependencies:
     sdk: flutter
   http: ^0.13.4  
   webviewx: ^0.2.1
+  crypto: ^3.0.1
 
 dev_dependencies:
   flutter_test:
