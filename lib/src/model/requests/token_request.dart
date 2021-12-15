@@ -5,8 +5,11 @@ class TokenRequest {
   ///[clientId] is a Public Id Provided by DAuth Server at the time of Client Registration.
   final String clientId;
 
-  ///[clientSecret] is a Secret Provided by DAuth Server at the time of Client Registration.
-  final String clientSecret;
+  ///[code_verifier] is a Secret Provided by DAuth Server at the time of Client Registration.
+  String? codeVerifier;
+
+  ///[code_challenge_method] is a Secret Provided by DAuth Server at the time of Client Registration.
+  final String codeChallengeMethod;
 
   ///[redirectUri] is usually the `callbackurl` given during Client Registration.
   final String redirectUri;
@@ -27,9 +30,11 @@ class TokenRequest {
 
   ///[nonce] is a client generated string. It will be returned in the token and hence the client can validate the token.
   final String? nonce;
+
   TokenRequest({
     required this.clientId,
-    required this.clientSecret,
+    this.codeVerifier,
+    required this.codeChallengeMethod,
     required this.redirectUri,
     this.responseType = 'code',
     this.grantType = 'authorization_code',
@@ -46,24 +51,26 @@ class TokenRequest {
 
   factory TokenRequest.fromJson(Map<String, dynamic> json) => TokenRequest(
         clientId: json['client_id'],
-        clientSecret: json['client_secret'],
+        codeVerifier: json['code_verifier'],
         redirectUri: json['redirect_uri'],
         responseType: json['response_type'],
         grantType: json['grant_type'],
         state: json['state'],
         scope: json['scope'],
         nonce: json['nonce'],
+        codeChallengeMethod: json['code_challenge_method'],
       );
 
   Map<String, dynamic> toJson() => {
         'client_id': clientId,
-        'client_secret': clientSecret,
+        'code_verifier': codeVerifier,
         'redirect_uri': redirectUri,
         'response_type': responseType,
         'grant_type': grantType,
         'state': state,
         'scope': scope ?? scope!.scopeParser(),
         'nonce': nonce,
+        'code_challenge_method': codeChallengeMethod,
       };
 }
 

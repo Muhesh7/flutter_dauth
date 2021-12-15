@@ -32,13 +32,15 @@ class HomeState extends State<HomePage> {
       //Your Client-Id provided by Dauth Server at the time of registration.
       clientId: 'YOUR CLIENT ID',
       //Your Client-Secret provided by Dauth Server at the time of registration.
-      clientSecret: 'YOUR CLIENT SECRET',
+      codeVerifier: 'YOUR CLIENT SECRET',
       //redirectUri provided by You to Dauth Server at the time of registration.
       redirectUri: 'YOUR REDIRECT URI',
       //A String which will retured with access_token for token verification in client side.
       state: 'STATE',
       //setting isUser to true to retrive UserDetails in ResourceResponse from Dauth server.
-      scope: const dauth.Scope(isUser: true));
+      scope: const dauth.Scope(isUser: true),
+      //codeChallengeMethod Should be specified as `plain` or `S256` based on thier requirement.
+      codeChallengeMethod: 'S256');
 
   @override
   Widget build(BuildContext context) => SafeArea(

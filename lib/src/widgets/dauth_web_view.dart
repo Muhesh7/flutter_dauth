@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dauth/src/api/api_service.dart';
 import 'package:flutter_dauth/src/model/requests/token_request.dart';
-import 'package:flutter_dauth/src/model/response/result_response.dart';
 import 'package:flutter_dauth/src/model/response/token_response.dart';
 import 'package:flutter_dauth/src/widgets/dauth_loader.dart';
 import 'package:webviewx/webviewx.dart';
@@ -20,7 +19,7 @@ class DauthWebView extends StatelessWidget {
   final TokenRequest request;
 
   ///[completer] returns the future when `TokenResponse` is fetched.
-  final Completer<ResultResponse<TokenResponse, String>> completer;
+  final Completer<TokenResponse> completer;
 
   ///[loader] returns the future when webView is loaded.
   final Completer<bool> loader;
